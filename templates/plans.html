@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+
+	<title>Plans</title>
+    <link href="/static/style.css" rel="stylesheet" type="text/css">
+
+    <script src = "https://code.jquery.com/jquery-3.6.0.min.js">
+    </script>
+</head>
+
+<body>
+  
+    <header>
+
+    <div class="header-left">
+      <a href="https://iteration-1-of-studyscheduler.ics4u-studyscheduler.repl.co/newstudysession">
+        <button>Back</button>
+      </a>
+    </div>
+
+    <div class="header-right">
+      <a href="https://iteration-1-of-studyscheduler.ics4u-studyscheduler.repl.co/setting">
+        <button>Settings</button>
+      </a>
+    </div>
+    
+    <div class="header-middle">
+        <br>
+        Plans
+    </div>
+
+</header>
+
+<hr></hr>
+
+    <p>hello</p>
+
+    <h1>
+        {%for x in value[0]:%}
+            {{x}}
+            <br>
+        {%endfor%}
+            
+    </h1>
+
+    <form action="/studying" method="POST">
+    <div class="select"><input class = "inputButton" type="submit" value="Select"></input></div>
+    </form>
+    <br>
+
+    <p>
+        {{value[1]}}
+    </p>
+    
+</body>
+</html>

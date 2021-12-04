@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+
+	<title>Settings</title>
+    <link href="/static/style.css" rel="stylesheet" type="text/css">
+
+    <script src = "https://code.jquery.com/jquery-3.6.0.min.js">
+    </script>
+</head>
+<header>
+    <div class="header-left">
+        <a href="https://iteration-1-of-studyscheduler.ics4u-studyscheduler.repl.co">
+    <button>Home</button>
+    </a>
+    </div>
+    <div class="header-right">
+        <a href="https://iteration-1-of-studyscheduler.ics4u-studyscheduler.repl.co/setting">
+    <button>Settings</button>
+        </a>
+    </div>
+    <div class="header-middle">
+        <br>
+        Settings
+    </div>
+</header>
+<body class = "">
+<hr></hr>
+<form action="/setting" method="POST">
+<!--<div class="dark_mode"><input class = "inputButton" type="submit" value="Dark Mode"></input></div>-->
+</form>
+
+<button onclick='dark()'>
+    Dark Mode
+</button>
+
+</body>
+<script>
+    function dark(){
+        $("body").toggleClass("darkMode");
+        $(".header-middle").toggleClass("darkMode");
+        $("hr").toggleClass("darkmodeHR");
+        $("button").toggleClass("darkmodeButton")
+  }
+</script>
