@@ -129,9 +129,7 @@
         var durMKey = durationIDmins(count);
         //access the duration
         var durH = values[1][durHKey];
-        console.log(durH);
         var durM = values[1][durMKey];
-        console.log(durM);
         //takes the hours and minutes described by user and makes it into an integer
         var timeNeededH=parseInt(durH);
         var timeNeededM=parseInt(durM);
@@ -184,7 +182,7 @@
       var timePaused = false;
       var pauseTime = 0;
       var timeDiff = 0;
-      //var dict = values[1];
+      var dict = values[1];
 
       //this function runs the timer
       async function trueTimer() {
@@ -203,14 +201,12 @@
           //show what the current task is
           document.getElementById("taskNames").innerHTML="Task: "+taskList[count-1];
 
-          /*for(const [key, value] of Object.entries(dict)){
+          for(const [key, value] of Object.entries(dict)){
             if (value == taskList[count-1]){
-              var index = key;
+              var index = key.substring(4);
             }
-          }*/
-
-          //countDownDate = countDown(index);
-          countDownDate = countDown(count);
+          }
+          countDownDate = countDown(index);
           timerON = true;
 
           //main timer calculations
@@ -293,13 +289,18 @@
         var totS = 0;
         //loops through each task
         for (var i =1; i<=taskList.length; i++){
-          //gets the time needed for specific task
-          var durHKey = durationIDhours(i);
-          var durMKey = durationIDmins(i);
-          var durH = parseInt(values[1][durHKey]);
-          var durM = parseInt(values[1][durMKey]);
-          //adds the time to variable in terms of seconds
-          totS += durH*60*60 + durM*60;
+          for(const [key, value] of Object.entries(dict)){
+            if (value == taskList[i-1]){
+              var index = key.substring(4);
+              //gets the time needed for specific task
+              var durHKey = durationIDhours(index);
+              var durMKey = durationIDmins(index);
+              var durH = parseInt(values[1][durHKey]);
+              var durM = parseInt(values[1][durMKey]);
+              //adds the time to variable in terms of seconds
+              totS += durH*60*60 + durM*60;
+            }
+          }
         }
         return totS;
       }
