@@ -1,217 +1,221 @@
+<!--Title: Study Scheduler-->
+<!--Authors: Alex Zhang and Kellen Sun-->
+
+<!--This page is used to record the information from the user. Using the pages various buttons, the user can add tasks, delete the most recent task, and start their new study session. They can also access the settings page and the home page. -->
+
 <!doctype html>
+
 <html>
-<head>
-
-	<title>Study Scheduler</title>
+  <!--Connects CSS and Jquery and gives name to the website-->
+  <head>
+	  <title>Study Scheduler</title>
     <link href="/static/style.css" rel="stylesheet" type="text/css">
-
-    <script src = "https://code.jquery.com/jquery-3.6.0.min.js">
-    </script>
-</head>
-
-<body>
-<header>
-    <div class="header-left">
+    <script src = "https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <!--check if the websie should be dark mode or not-->
+  <body onload = "dark()">
+    <header>
+    <!--Create the headers with home, settings and title-->
+      <div class="header-left">
         <a href="https://iteration-1-of-studyscheduler.ics4u-studyscheduler.repl.co">
-    <button>Home</button>
-    </a>
-    </div>
-    <div class="header-right">
-        <a href="https://iteration-1-of-studyscheduler.ics4u-studyscheduler.repl.co/setting">
-    <button>Settings</button>
+          <button class="logo">&#160&#160§&#160&#160</button>
         </a>
-    </div>
-    <div class="header-middle">
+      </div>
+
+      <div class="header-right">
+        <a href="https://iteration-1-of-studyscheduler.ics4u-studyscheduler.repl.co/setting">
+          <button>Settings</button>
+        </a>
+      </div>
+
+      <div class="header-middle">
         <br>
         New Study Session
-    </div>
-</header>
-<hr></hr>
-<p>
-    Please enter 
-</p>
-<form action="/plans" method="POST">
+      </div>
+    </header>
+    <!--Horizontal divider-->
+    <hr></hr>
+    
+    <!--We create a form so that we can read the return information in flask. This form connects all the textboxes together into one form and posts it to flask when finished.-->
+    <form action="/plans" method="POST">
+      <!--Default necessary information to be entered-->
+      <div class="startinfo"> 
+        <label for="test"> Study Session Name: </label>
+        <input name="sessionname" id="sessionname" type="text" placeholder="Enter session name"/> 
+        <br>
+        <label for="test"> Studying Time: </label>
+        <input name="studytimeH" id="studytimeH" type="text" placeholder="hours" size="6"/>
+        :
+        <input name="studytimeM" id="studytimeM" type="text" placeholder="minutes" size="6"/>
+      </div>
+      
+      <br>
+      <!--We got ssome task names and more can be added by JS.-->
+      <!--For each one we require a name, importance and duration(minutes and hours.)-->
+      <div class="singletask">
+        <h2>Task 1:</h2>
 
-<div class="startinfo">
+        <label for="test"> Name: </label>
+          <span>
+            <input name="task1" id="task1" type="text" placeholder="Enter task name" size="16"/>
+          </span>
 
-<label for="test"> Study Session Name: </label>
-  <input name="sessionname" id="sessionname" type="text" placeholder="Enter session name"/>
+        <br>
 
-<br>
-<label for="test"> Studying Time: </label>
-  <input name="studytimeH" id="studytimeH" type="text" placeholder="hours" size="6"/>
- :
-        <input name="studytimeM" id="studytimeM" 
-               type="text" placeholder="minutes" size="6"/>
-</div>
-<br>
+        <label for="test"> Importance: </label>
+          <span>
+            <input name="Importance1" id="Importance1" type="text" placeholder="1-10" size="16"/>
+          </span>
 
-<div class="singletask">
-<h2>Task 1:</h2>
+        <br>
 
-<label for="test"> Name: </label>
-    <span>
-        <input name="task1" id="task1" 
-               type="text" placeholder="Enter task name" size="16"/>
-    </span>
-<br>
-<label for="test"> Importance: </label>
-    <span>
-        <input name="Importance1" id="Importance1" 
-               type="text" placeholder="1-10" size="16"/>
-    </span>
-<br>
-<label for="test"> Duration: </label>
-    <span>
-        <input name="DurationH1" id="DurationH1" 
-               type="text" placeholder="h"size="4"/>
-    </span>
-    : 
-    <span>
-        <input name="DurationM1" id="DurationM1" 
-               type="text" placeholder="min" size="4"/>
-    </span>
-</div>
+        <label for="test"> Duration: </label>
+          <span>
+            <input name="DurationH1" id="DurationH1" type="text" placeholder="h"size="4"/>
+          </span>
+          : 
+          <span>
+            <input name="DurationM1" id="DurationM1" type="text" placeholder="min" size="4"/>
+          </span>
+      </div>
 
-<script>
-  // this function counts what task number the user is on
-  var taskCount = 1;
-  function counter(){
-    taskCount += 1;
-    return taskCount;
-  }
-  //this function is used to remove one from counter for remove task
-  function removeCounter(){
-    taskCount = taskCount-1;
-    return taskCount
-  }
-  // uses function counter to create the task name
-  function taskName(number) {
-    var taskName = "Task "+number+":";
-    return taskName;
-  }
-  // uses function counter to create the importance id
-  function importanceID(number){
-    var importanceID = "Importance"+number;
-    return importanceID;
-  }
-  // uses function counter to create the duration id for hours
-  function durationIDhours(number){
-    var durationID = "DurationH"+number;
-    return durationID;
-  }
-  //duration id for mins
-  function durationIDmins(number){
-    var durationID = "DurationM"+number;
-    return durationID;
-  }
-  //id for h2 (where it says task 1, task 2, ...)
-  function taskID(number){
-    var taskID = "task"+number;
-    return taskID;
-  }
-  //id for the divider
-  function divID(number){
-    var divID = "div"+number;
-    return divID;
-  }
+      <script>
+        function dark(){
+          //retrieves the python variable value to access the darkmode variable
+          //turns it into a javascript variable
+          var darkMode = {{ value[2]|tojson }};
+          //toggles the dark mode classes if darkMode is true
+          if (darkMode == true){
+            $("body").toggleClass("darkMode");
+            $(".header-middle").toggleClass("darkMode");
+            $("hr").toggleClass("darkmodeHR");
+            $("button").toggleClass("darkmodeButton");
+            $("footer").toggleClass("darkMode");
+            $(".inputButton").toggleClass("darkModeInputButton");
+            $(".logo").toggleClass("dark_mode_logo");
+          }
+        }
+        
+        //initializes global var taskCount
+        var taskCount = 1;
 
-  // appends the things neccessary for a new task
-  function appendText() {
-    var count = counter();
-    var cloneID = divID(count);
-    var cloneh2 = taskID(count);
-    var cloneName = taskName(count);
-    var cloneImp = importanceID(count);
-    var cloneH = durationIDhours(count);
-    var cloneM = durationIDmins(count);
+        // this function counts what task number the user is on
+        function counter(){
+          taskCount += 1;
+          return taskCount;
+        }
+        
+        //this function is used to remove one from counter for remove task
+        function removeCounter(){
+          taskCount = taskCount-1;
+          return taskCount
+        }
+        
+        // uses function counter to create the task name
+        function taskName(number) {
+          var taskName = "Task "+number+":";
+          return taskName;
+        }
+        
+        // uses function counter to create the importance id
+        function importanceID(number){
+          var importanceID = "Importance"+number;
+          return importanceID;
+        }
+        
+        // uses function counter to create the duration id for hours
+        function durationIDhours(number){
+          var durationID = "DurationH"+number;
+          return durationID;
+        }
+        
+        //duration id for mins
+        function durationIDmins(number){
+          var durationID = "DurationM"+number;
+          return durationID;
+        }
+        
+        //id for h2 (where it says task 1, task 2, ...)
+        function taskID(number){
+          var taskID = "task"+number;
+          return taskID;
+        }
+        
+        //id for the divider
+        function divID(number){
+          var divID = "div"+number;
+          return divID;
+        }
 
-    //add a divider with the id corresponding to the task number
-    $(".singletask").append("<div id="+cloneID+"></div>");
-    //appends var clone to divider with id as a h2 element
-    $("#"+cloneID).append("<h2>"+cloneName+"</h2>");
-    //adds label Name:
-    $("#"+cloneID).append("<label for='test'> Name: </label>");
-    //adds input box for task name
-    $("#"+cloneID).append("<input name="+cloneh2+" id="+cloneh2+" type='text' placeholder='Enter task name' size='16'/>");
-    //starts on the next line
-    $("#"+cloneID).append("<br>");
-    //adds label importance
-    $("#"+cloneID).append("<label for='test'> Importance: </label>");
-    //adds input box for importance value
-    $("#"+cloneID).append("<input name="+cloneImp+" id="+cloneImp+" type='text' placeholder='1-10' size='16'/>");
-    //starts on next line
-    $("#"+cloneID).append("<br>");
-    //add label duration
-    $("#"+cloneID).append("<label for='test'>Duration: </label>");
-    //adds the input boxes for hours and mins
-    $("#"+cloneID).append("<input name="+cloneH+" id="+cloneH+" type='text' placeholder='h' size='4'/>");
-    $("#"+cloneID).append(" : ");
-    $("#"+cloneID).append("<input name="+cloneM+" id="+cloneM+" type='text' placeholder='min' size='4'/>");
-  }
+        // appends the things neccessary for a new task
+        function appendText() {
+          //initializes all the id's necessary for the input boxes
+          var count = counter();
+          var cloneID = divID(count);
+          var cloneh2 = taskID(count);
+          var cloneName = taskName(count);
+          var cloneImp = importanceID(count);
+          var cloneH = durationIDhours(count);
+          var cloneM = durationIDmins(count);
+          
+          //add a divider with the id corresponding to the task number
+          $(".singletask").append("<div id="+cloneID+"></div>");
+          //appends var clone to divider with id as a h2 element
+          $("#"+cloneID).append("<h2>"+cloneName+"</h2>");
+          //adds label Name:
+          $("#"+cloneID).append("<label for='test'> Name: </label>");
+          //adds input box for task name
+          $("#"+cloneID).append("<input name="+cloneh2+" id="+cloneh2+" type='text' placeholder='Enter task name' size='16'/>");
+          //starts on the next line
+          $("#"+cloneID).append("<br>");
+          //adds label importance
+          $("#"+cloneID).append("<label for='test'> Importance: </label>");
+          //adds input box for importance value
+          $("#"+cloneID).append("<input name="+cloneImp+" id="+cloneImp+" type='text' placeholder='1-10' size='16'/>");
+          //starts on next line
+          $("#"+cloneID).append("<br>");
+          //add label duration
+          $("#"+cloneID).append("<label for='test'>Duration: </label>");
+          //adds the input boxes for hours and mins
+          $("#"+cloneID).append("<input name="+cloneH+" id="+cloneH+" type='text' placeholder='h' size='4'/>");
+          $("#"+cloneID).append(" : ");
+          $("#"+cloneID).append("<input name="+cloneM+" id="+cloneM+" type='text' placeholder='min' size='4'/>");
+        }
+        
+        //when the remove task button is clicked, removeText is called
+        //removes the most recent task
+        function removeText(){
+          //only works if taskCount is larger than 1, other wise, we get task 0 or negative tasks
+          if (taskCount >1) {
+            var count = taskCount;
+            var cloneID = divID(count);
+            //removes elements with cloneID id (h2 element)
+            $("#"+cloneID).remove();
+            //lowers counter by 1 so we can continue counting
+            count = removeCounter();
+          }
+        }
+      </script>
 
-  function removeText(){
-    if (taskCount >1) {
-      var count = taskCount;
-      var cloneID = divID(count);;
-      //removes elements with cloneID id (h2 element)
-      $("#"+cloneID).remove();
-      count = removeCounter();
-    }
-  }
-  function collectdata(){
-    var counter = 1;
-    //takes the value from session name and study time input
-    var sessionname = $("#sessionname").val();
-    var studytimeH = $("#studytimeH").val();
-    var studytimeM = $("#studytimeM").val();
-    //while loop is so that we can iterate through all the tasks
-    while(counter <= taskCount){
-      //creates the id that would be used to find the input boxes
-      var cloneh2 = taskID(counter);
-      var cloneName = taskName(counter);
-      var cloneImp = importanceID(counter);
-      var cloneH = durationIDhours(counter);
-      var cloneM = durationIDmins(counter);
-      //gets the value within the input boxes
-      var name = $("#"+cloneh2).val();
-      var importance = $("#"+cloneImp).val();
-      var hours = $("#"+cloneH).val();
-      var mins = $("#"+cloneM).val();
-      console.log(sessionname);
-      console.log(studytimeH);
-      console.log(studytimeM);
-      console.log(name);
-      console.log(importance);
-      console.log(hours);
-      console.log(mins);
-      counter+=1;
-    }
-  }
-</script>
-
-<!--<footer>
-    <button type="new task button" onclick = "appendText()"> Add task!</button>
+      <br>
+      
+      <div class="start">
+        <input class = "inputButton" type="submit" value="Start"></input>
+      </div>
+    </form>
+    <!--New lines are used to give space to the task so that they can be scrolled too.-->
     <br>
-    <button type="Start button"> START!</button>
-</footer>-->
-<br>
-<div class="start"><input class = "inputButton" type="submit" value="Start"></input></div>
-</form>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<footer>
-    <button type="new task button" onclick = "appendText()"> Add task!</button>
-    <button type="remove task button" onclick = "removeText()"> Del task!</button>
     <br>
-    <!---
-    <button onclick="collectdata()">START!</button>
-    --->
-</footer>
+    <br>
+    <br>
+    <br>
+    <br>
+    <!--We have the add and remove task buttons in the footer. Each button calls a function when clicked.-->
+    <footer>
+      <button type="new task button" onclick = "appendText()"> Add task!</button>
+      <button type="remove task button" onclick = "removeText()"> Del task!</button>
+      <br>
+    </footer>
 
-</body>
+  </body>
 </html>

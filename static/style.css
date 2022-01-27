@@ -1,105 +1,122 @@
-body {
-    background: lightblue;
-}
+ /* Title: Study Scheduler*/
+/* Authors: Alex Zhang and Kellen Sun*/
 
+
+/*how the body looks*/
+body {
+    background: #d1f2fa;
+    color: #424242;
+}
+/*size of h2*/
 h2 {
     size: 14px;
     
 }
-
+/*how the header element looks*/
 header{
     position: sticky;
     top: 0;
-    background: lightblue;
+    background: #d1f2fa;
     height: 70px;
 }
-
+/*how do elements with the class header-left look*/
 .header-left {
     font-size: 150%;
-    color: black;
+    color: #424242;
     width: 10%;
     float: left;
 }
-
+/*how the class header-middle looks*/
 .header-middle {
     width: 100%;
     text-align: center;
     font-size: 200%;
-    background: lightblue;
+    background: #d1f2fa;
 }
-
+/*how the class header-right looks*/
 .header-right {
     float: right;
     width: 10%;
     font-size: 150%;
-    color: black;
+    color: #424242;
 }
-
+/*how the element footer looks*/
 footer {
     position: fixed;
     bottom: 0px;
     width: 100%;
-    background: lightblue;
+    background: #d1f2fa;
     text-align: center;
 }
-
+/*how the element hr looks*/
 hr {
-    border-top: 6px solid black;
+    border-top: 6px solid #424242;
     position: sticky;
     top: 70px;
     background: rgb(88, 144, 163);
 }
-
+/*how the element label looks*/
 label {
     display: inline-block;
     width: 150px;
     text-align: right;
 }
-
+/*centering the class startinfo*/
 .startinfo {
     text-align: center;
 }
-
+/*centering the class singletask*/
 .singletask {
     text-align: center;
 }
-
+/*element a has blue text*/
 a{
     color: blue;
 }
-
+/*how the element button looks*/
 button {
-  background-color: rgb(90, 181, 255); 
-  border: none;
-  color: white;
+  background-color: #b3f6ff; 
+  color: rgb(45, 4, 194);
   padding: 8px 8px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
   border-radius: 12px;
-  border: 3px solid rgb(255, 255, 255);
+  border: 3px solid white;
   transition-duration: 0.4s;
   cursor: pointer;
 }
+/*how the element button looks when hovered over*/
 button:hover {
   background-color: rgb(45, 4, 194); 
-  color: white;
+  color: #b3f6ff;
 }
-
+/*how the button element looks when clicked on*/
 button:active {
   background-color: rgb(2, 2, 97);
   box-shadow: 0 5px #666;
 }
-
+/*paragraph element's font size*/
 p{
   font-size: 100%;
+  
 }
-
+/*how the list element looks*/
+ol{
+  margin: auto;
+  width: 25%;
+  font-size: 120%;
+}
+/*how the class lastSession looks*/
+.lastSession{
+    text-align: center;
+    font-size: 150%;
+}
+/*how the class inputButton looks*/
 .inputButton{
-  background-color: rgb(90, 181, 255); 
-  border: none;
-  color: white;
+  background-color: #b3f6ff; 
+  color: rgb(45, 4, 194);
   padding: 8px 8px;
   text-align: center;
   text-decoration: none;
@@ -110,28 +127,93 @@ p{
   transition-duration: 0.4s;
   cursor: pointer;
 }
-
+/*centering the class start*/
 .start{
     text-align: center;
 }
+/*how the class boxed looks*/
+.boxed{
+  width: 30%;
+  border: 2px solid grey;
+  text-align: center;
+  margin: auto;
+}
+/*centering the class create_session */
+.create_session{
+    text-align: center;
+}
+/*how the id taskNames looks*/
+#taskNames{
+  text-align: center;
+  font-family: "Open Sans", sans serif;
+  font-size: 20px;
+
+}
+/*how the id timer looks*/
+#timer{
+  text-align: center;
+  font-size: 20px;
+
+}
+/*how the id completionTime looks*/
+#completionTime{
+  text-align: center;
+  font-size: 20px;
+
+}
+/*how the id nexTask looks*/
+#nextTask{
+  text-align: center;
+  font-size: 20px;
+
+}
+/*how the id timeRemaining looks*/
+#timeRemaining{
+  text-align: center;
+  font-size: 20px;
+
+}
+/*how the h3 element looks*/
+h3{
+  text-align: center;
+  font-size: 25px;
+
+}
+/*how the class pause looks*/
+.pause{
+  text-align: center;
+  font-size: 20px;
+
+}
+/*how the class dark_mode looks*/
+.dark_mode{
+  text-align: center;
+  font-size: 24px;
+}
+
+.logo{
+  font-family: "EB Garamond";
+  font-size:150%
+}
 
 /*dark mode classes*/
-
+/*how the class darkMode looks*/
 .darkMode{
   background: #011438;
   color:white;
 }
-
+/*how the class darkmodeHR looks*/
+/*specifically made for the hr element*/
 .darkmodeHR{
   border: 4px solid lightblue;
   position: sticky;
   top: 70px;
   background: lightblue;
 }
-
+/*how the class darkmodeButton looks*/
+/*specifically made for the button element*/
 .darkmodeButton{
   background-color: rgb(13, 92, 156); 
-  border: none;
   color: white;
   padding: 8px 8px;
   text-align: center;
@@ -142,4 +224,36 @@ p{
   border: 3px solid rgb(255, 255, 255);
   transition-duration: 0.4s;
   cursor: pointer;
+}
+/*how the class darkmodeButton looks*/
+/*specifically made for the button element when hovered over*/
+.darkmodeButton:hover {
+  background-color: #b3f6ff;
+  color: rgb(45, 4, 194);
+}
+/*how the class darkmodeButton looks*/
+/*specifically made for the button element when clicked*/
+.darkmodeButton:active {
+  background-color: #36d4fc;
+  box-shadow: 0 5px #BBBBBB;
+}
+/*how the class darkmodeInputButton looks*/
+/*specifically made for the input button element*/
+.darkModeInputButton{
+  background-color: rgb(13, 92, 156); 
+  color: white;
+  padding: 8px 8px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 12px;
+  border: 3px solid rgb(255, 255, 255);
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.dark_mode_logo{
+  font-family: "EB Garamond";
+  font-size:150%
 }

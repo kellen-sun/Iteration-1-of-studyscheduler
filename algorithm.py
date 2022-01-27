@@ -12,12 +12,15 @@ def algorithm(tasks, total_time):
     task_counter = 1  # count how many tasks there are
 
     task_s = set(tasks.keys())
-    
+    #task_perms is the name of the permutations of the tasks
     task_perms = list(powerset(task_s))
 
+    #perms time is the total time for each possible permutation.
+    #perms importance the total importance of each possible perms_importance
     perms_time = []
     perms_importance = []
 
+    #Find the time and importance of each possible set of tasks
     for i in range(len(task_perms)):
         t = 0
         importance = 0
@@ -27,24 +30,25 @@ def algorithm(tasks, total_time):
         perms_time.append(t)
         perms_importance.append(importance)
 
-    #perms time is the total time for each possible permutation.
-    #perms importance the total importance of each possible perms_importance
-    #task_perms is the name of the permutations of the tasks
+    #this just a very common maximizing algorithm
+    #basically for loops search for largest importance which is also less than the time limit
 
-    #this just a maximizing algoithm very common and basic for loop search for largest.
     current_plan = ""
     current_max = 0
 
     for i in range(len(perms_time)):
+        #check if less than time limit
         if perms_time[i] <= total_time:
+            #check if current importance is more than the maximum we found.
             if perms_importance[i] > current_max:
+                #If more important we update the max
                 current_max = perms_importance[i]
                 current_plan = task_perms[i]
-
-    #print("Work on: (order doesn't matter) ")
+    #return the best plan
     return [*current_plan]
-    
+
 def check_int(h, full):
+    '''Check if the information provided in the textboxes are integers where it needs to be integers.'''
     is_int = True
     for i in range(len(h)//4):
         if not (full[h[4*i+1]].isdigit() and full[h[4*i+2]].isdigit() and full[h[4*i+3]].isdigit()):

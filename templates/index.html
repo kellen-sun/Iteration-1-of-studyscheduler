@@ -1,11 +1,81 @@
+<!--Title: Study Scheduler-->
+<!--Authors: Alex Zhang and Kellen Sun-->
+
+<!--This is the home page. This has 3 main buttons that direct the user to itself, thr settings page and the page to create a new study session. It also displays the information for thr pervious study session.-->
+
 <!doctype html>
 
-<head>
-	<title>Home</title>
+<html>
+  <!--We give a title to the home page and link the sources for css and jquery.-->
+  <head>
+    <title>Home</title>
     <link href="/static/style.css" rel="stylesheet" type="text/css">
-</head>
-<body>
-    <a href="https://iteration-1-of-studyscheduler.ics4u-studyscheduler.repl.co/newstudysession">
-    Create a New Study Session
-    </a>
-</body>
+    <script src = "https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <!--We check if the website is in darkmode before running everything else.-->
+  <body onload = "dark()">
+    <header>
+      <!--We create some headers for the website such as the left one with a home button, center with title and right one with settings page button-->
+      <div class="header-left">
+        <a href="https://iteration-1-of-studyscheduler.ics4u-studyscheduler.repl.co">
+          <button class="logo">&#160&#160§&#160&#160</button>
+        </a>
+      </div>
+
+      <div class="header-right">
+        <a href="https://iteration-1-of-studyscheduler.ics4u-studyscheduler.repl.co/setting">
+          <button>Settings</button>
+        </a>
+      </div>
+
+      <div class="header-middle">
+        <br>
+        Home
+      </div>
+
+    </header>
+
+<!--Horizontal divider-->
+    <hr></hr>
+    <!--Button to create a new study session-->
+    <div class="create_session">
+      <a href="https://iteration-1-of-studyscheduler.ics4u-studyscheduler.repl.co/newstudysession">
+        <button>
+          Create a New Study Session
+        </button>
+      </a>
+    </div>
+    
+    <br>
+    
+    <!--This part shows one what they studied on the previous session-->
+    <div class="lastSession">
+      Your Previous Study Session:
+    </div>
+    <!--We make it into a list so it looks better.-->
+    <ol>{% for i in range(value[1] | length): %}
+      <li> 
+        {{value[1][i]}}
+        <br>
+      </li>
+      {% endfor %}
+    </ol>
+  
+    <script>
+      function dark(){
+        //retrieves the python variable value to access the darkmode variable
+        //turns it into a javascript variable
+        var darkMode = {{ value[2]|tojson }};
+        //toggles the dark mode classes if darkMode is true
+        if (darkMode == true){
+          $("body").toggleClass("darkMode");
+          $(".header-middle").toggleClass("darkMode");
+          $("hr").toggleClass("darkmodeHR");
+          $("button").toggleClass("darkmodeButton");
+          $(".logo").toggleClass("dark_mode_logo");
+        }
+      }
+    </script>
+
+  </body>
+</html>

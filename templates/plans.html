@@ -1,57 +1,103 @@
+<!--Title: Study Scheduler-->
+<!--Authors: Alex Zhang and Kellen Sun-->
+
+<!--Just like the other pages, the user can access the settings and the home page from here. This is where we display the plan for the user. It tells the user what tasks are included and which ones were cut out.-->
+
 <!doctype html>
+
 <html>
-<head>
 
-	<title>Plans</title>
-    <link href="/static/style.css" rel="stylesheet" type="text/css">
+  <head>
+    <!--We link css, and jquery and give a name to the webpage-->
+    <title>Plans</title>
+      <link href="/static/style.css" rel="stylesheet" type="text/css">
+      <script src = "https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
 
-    <script src = "https://code.jquery.com/jquery-3.6.0.min.js">
-    </script>
-</head>
-
-<body>
-  
+  <body onload = "dark()">
+  <!--set darkmode if necessary as soon as the website loads.-->
     <header>
+      <!--Creates the header with home, settings button and title-->
+      <div class="header-left">
+        <a href="https://iteration-1-of-studyscheduler.ics4u-studyscheduler.repl.co/newstudysession">
+          <button>Back</button>
+        </a>
+      </div>
 
-    <div class="header-left">
-      <a href="https://iteration-1-of-studyscheduler.ics4u-studyscheduler.repl.co/newstudysession">
-        <button>Back</button>
-      </a>
-    </div>
-
-    <div class="header-right">
-      <a href="https://iteration-1-of-studyscheduler.ics4u-studyscheduler.repl.co/setting">
-        <button>Settings</button>
-      </a>
-    </div>
-    
-    <div class="header-middle">
+      <div class="header-right">
+        <a href="https://iteration-1-of-studyscheduler.ics4u-studyscheduler.repl.co/setting">
+          <button>Settings</button>
+        </a>
+      </div>
+      
+      <div class="header-middle">
         <br>
         Plans
-    </div>
+      </div>
+    </header>
 
-</header>
-
-<hr></hr>
-
-    <p>hello</p>
-
+    <hr></hr>
+    <!--We display the elements in the plan-->
+    <!--First check if there's just one task, then list the tasks each on their own line-->
+    <!--List the not used task in "We couldn't fit:" if there's nothing display NONE-->
     <h1>
-        {%for x in value[0]:%}
-            {{x}}
-            <br>
-        {%endfor%}
-            
-    </h1>
+        {%if value[0] | length ==1: %}
+          Task in this session:
+        {%else%}
+          Tasks in this session:
+        {%endif%}
 
+        <br>
+
+        {%for x in value[0]:%}
+          {{x}}
+          <br>
+        {%endfor%}
+
+        <br>
+        We couldn't fit: 
+        <br>
+
+        {% set a = value[1].values() | list %}
+        {% set a = a[3::4] %}
+        {% set y = []%}
+
+        {% for x in a:%}
+          {% if x not in value[0]: %}
+            {{x}} <br>
+            {{y.append(x)|default("", True)}}
+          {% endif %}
+        {% endfor %}
+        
+        {%if y | length == 0: %}
+          {{"NONE"}}
+        {%endif%}
+    </h1>
+    <!--A form is made to submit the tasks over to the next page so they can be accessed.-->
     <form action="/studying" method="POST">
-    <div class="select"><input class = "inputButton" type="submit" value="Select"></input></div>
+      <div class="select">
+        <input class = "inputButton" type="submit" value="Select">
+        </input>
+      </div>
     </form>
     <br>
 
-    <p>
-        {{value[1]}}
-    </p>
-    
-</body>
+    <script>
+      function dark(){
+        //retrieves the python variable value to access the darkmode variable
+        //turns it into a javascript variable
+        var darkMode = {{ value[2]|tojson }};
+        //toggles the dark mode classes if darkMode is true
+        if (darkMode == true){
+          $("body").toggleClass("darkMode");
+          $(".header-middle").toggleClass("darkMode");
+          $("hr").toggleClass("darkmodeHR");
+          $("button").toggleClass("darkmodeButton");
+          $("footer").toggleClass("darkMode");
+          $(".inputButton").toggleClass("darkModeInputButton");
+        }
+      }
+    </script>
+
+  </body>
 </html>

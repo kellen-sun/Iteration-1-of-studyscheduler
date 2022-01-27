@@ -1,26 +1,46 @@
+#Title: Study Scheduler
+#Authors: Alex Zhang and Kellen Sun
+
+#imports from other files and flask.
 from algorithm import algorithm, check_int
 from flask import Flask, render_template, url_for, request, redirect
 
+#global variables so that every function/html page can access them
+full={}
+alg_out=[]
+dark_mode = False
+
+#Create a flask instance
 app = Flask(
   __name__,
   template_folder='templates',
   static_folder='static'
 )
-dark_mode = False
+
 
 # Index page
+#each routing function does about the same, we call the 3 global variables then return a rendered template while passing the variables to the appropriate html file
+#for index the url ends with /, and we pass the index.html file.
 @app.route('/')
 def index():
-  return render_template('index.html')
+  global full
+  global alg_out
+  global dark_mode
+  return render_template('index.html', value = [full, alg_out, dark_mode])
 
 # The page where the user can enter tasks and create new study sessions.
 @app.route('/newstudysession')
 def newstudysession():
     global dark_mode
-    return render_template('newstudysession.html')
+    global full
+    global alg_out
+    return render_template('newstudysession.html', value=[full, alg_out, dark_mode])
 
 @app.route('/plans', methods=["POST", "GET"])
 def plans():
+    global full
+    global alg_out
+    global dark_mode
     full=dict(request.form)
     #full is a dictionary of all the information from the textboxes, keys are the textbox names, values are the inputs as strings
     #full was to mean full amount of data
@@ -33,7 +53,7 @@ def plans():
         #t is the total amount of time to study for
         tasks={}
         #tasks is a dict of the tasks as the algorithm needs them, key is taskname, value is a 2 element list, time and importance
-        print(h)
+        #print(h)
         for i in range(1, 1+(len(h)//4)):
             j=str(i)
             #we take a str of our counter so that we can acess the task number by ID names
@@ -42,22 +62,36 @@ def plans():
             #we need to int() everything for the algorithm to work
         # we pass tasks and t into the algorithm
         #when we render the html, we can pass 1 value. which is our algorithm output and 'full' which is all the data in case we need extra information
-        return render_template('plans.html',value=[algorithm(tasks, t), full])
+
+        alg_out=algorithm(tasks, t)
+        #alg_out is what the algorithm outputs
+
+        return render_template('plans.html',value=[alg_out, full, dark_mode])
     else:
         return redirect(url_for('newstudysession'))
     #return "<h1> "+str(algorithm(tasks,t))+" </h1>"
 
-@app.route('/studying')
+@app.route('/studying', methods=["POST", "GET"])
 def studying():
-  return render_template('studying.html')
+    global full
+    global alg_out
+    global dark_mode
+    #full is a global variable of all the information given in the form page
+    print(full)
+    print(alg_out)
+    return render_template('studying.html',value=[alg_out, full,dark_mode])
 
+#making the settings page
 @app.route('/setting', methods=["POST", "GET"])
 def settings():
     print(request.form)
-    #print(full)
-    return render_template('setting.html')
+    global dark_mode
+    #if the settings page is reached from a button (namely the darkmode one)
+    if request.method == 'POST':
+        #then we flip the value of darkmode
+        dark_mode= not dark_mode
+    return render_template('setting.html',value=[alg_out, full, dark_mode])
 
-#print(algorithm({"math":[4,4],"english":[3,3]},5))
 
 if __name__ == '__main__':
   # Run the Flask app

@@ -1,15 +1,334 @@
+<!--Title: Study Scheduler-->
+<!--Authors: Alex Zhang and Kellen Sun-->
+
 <!doctype html>
+
 <html>
-<head>
+  <!--CSS and Jquery are added as well as a title to the page-->
+  <head>
+    <title>Studying</title>
+      <link href="/static/style.css" rel="stylesheet" type="text/css">
+      <script src = "https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <!--When the page is loaded darkmode is checked-->
+  <body onload = "darkMode()">
+      <!--Home and settings buttons in the header with a title-->
+    <header>
+      <div class="header-left">
+        <a href="https://iteration-1-of-studyscheduler.ics4u-studyscheduler.repl.co/" class="button">
+          <button class="logo">&#160&#160§&#160&#160</button>
+        </a>
+      </div>
 
-	<title>Studying</title>
-    <link href="/static/style.css" rel="stylesheet" type="text/css">
+      <div class="header-right">
+        <a href="https://iteration-1-of-studyscheduler.ics4u-studyscheduler.repl.co/setting">
+          <button>Settings</button>
+        </a>
+      </div>
+    
+      <div class="header-middle">
+        <!--value[1]['sessionname'] is the session name given in the new study session textbox-->
+        <br>
+        Studying: {{value[1]['sessionname']}}
+      </div>
+    </header>
 
-    <script src = "https://code.jquery.com/jquery-3.6.0.min.js">
+    <hr></hr>
+    <!--Here we have a box with the current time-->
+    <div class = 'boxed'>
+      <h2>Current Time</h2>
+      <h1 id="clock"></h1>
+      <br>
+    </div>
+    <!--We also show the task that is currently being studied-->
+    <h3>Currently Studying: </h3>
+    <div id='taskNames'>
+    </div>
+    <div id='timer'>
+    </div>
+    
+    <br>
+    <!--We have a few empty dividers so that js can fill them with the correct information after some calculations.-->
+    <div id='completionTime'>
+    </div>
+    
+    <br>
+
+    <div id='nextTask'>
+    </div>
+    <div id='timeRemaining'>
+    </div>
+
+    <br>
+    <!--This is the pause button which will pause the all the timers (except for current time clock) It calls the pause function.-->
+    <div class="pause">
+      <button onclick="pause()">
+        Pause
+      </button>
+    </div>
+
+    <script>
+      function darkMode(){
+        //retrieves the python variable value to access the darkmode variable
+        //turns it into a javascript variable
+        var darkMode = {{ value[2]|tojson }};
+        //toggles the dark mode classes if darkMode is true
+        if (darkMode == true){
+          $("body").toggleClass("darkMode");
+          $(".header-middle").toggleClass("darkMode");
+          $("hr").toggleClass("darkmodeHR");
+          $("button").toggleClass("darkmodeButton");
+          $("footer").toggleClass("darkMode");
+          $(".inputButton").toggleClass("darkModeInputButton");
+          $(".logo").toggleClass("dark_mode_logo");
+        }
+        startTime();
+      }
+      
+      //gets the date and time when called
+      function startTime() {
+        var today = new Date();
+        //gets the hours, minutes, and seconds
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+        //this is so we don't get 0 but 12 when its noon or midnight
+        if (h == 12 || h==24){h=checkTime(h%13)}
+        //so we can get the time in a 12 hour clock format, not a 24 hour clock format
+        else{h=checkTime(h%12)}
+        //adds a 0 in front so the clock looks clean
+        m=checkTime(m);
+        //adds a 0 in front so the clock looks clean
+        s=checkTime(s);
+        //adds the time to html element with id clock
+        document.getElementById('clock').innerHTML =  h + ":" + m + ":" + s;
+        //waits for 1 second before calling itself
+        setTimeout(startTime, 1000);
+      }
+
+      //duration id for hours
+      function durationIDhours(number){
+        var durationID = "DurationH"+number;
+        return durationID;
+      }
+      //duration id for mins
+      function durationIDmins(number){
+        var durationID = "DurationM"+number;
+        return durationID;
+      }
+
+      //takes the python list value and takes the list of tasks from it
+      var values = {{ value|tojson }};
+      var taskList = values[0];
+
+      //return number of milliseconds from Jan 1, 1970 midnight to date
+      //takes param count to access duration of a certain task
+      function countDown(count){
+        //uses count to generate the id of the duration of task
+        var durHKey = durationIDhours(count);
+        var durMKey = durationIDmins(count);
+        //access the duration
+        var durH = values[1][durHKey];
+        console.log(durH);
+        var durM = values[1][durMKey];
+        console.log(durM);
+        //takes the hours and minutes described by user and makes it into an integer
+        var timeNeededH=parseInt(durH);
+        var timeNeededM=parseInt(durM);
+        //gets the current date and time and splits it into an array
+        var today = new Date();
+        var countDownInfo = String(today).split(" ");
+        //takes the information from the array as new Date() always gives things in the same order
+        var month = countDownInfo[1];
+        var date = countDownInfo[2];
+        var year = countDownInfo[3];
+        //splits the time by : so we can get array with hours, mins, and secs separately
+        var time = countDownInfo[4].split(":")
+        //today.getHours, or getMinutes, or getSeconds just gets the current time
+        var hour = String(today.getHours()+timeNeededH); //adds hours described by user into hour
+        var minute = String(today.getMinutes()+timeNeededM); //adds mins described by user into minute
+        var second = String(today.getSeconds());
+        var time = hour+":"+minute+":"+second;
+        //use the variables above to create a date so that we get the number of milliseconds from Jan 1, 1970 midnigh to when the task would end
+        var countDownDate = new Date(month+" "+date+", "+year+" "+time).getTime();
+        return countDownDate;
+      }
+
+      //using the function above, we figure out how much time is left on a specific task
+      function timer(countDownDate) {
+        // Get today's date and time
+        var now = new Date().getTime();
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
+        // Time calculations for days, hours, minutes and seconds
+        var hours = checkTime(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+        var minutes = checkTime(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
+        var seconds = checkTime(Math.floor((distance % (1000 * 60)) / 1000));
+        // If the count down is over, write some text 
+        if (distance < 0) {
+          return "EXPIRED";
+        }
+        else{
+          // Output the result in an element with id="demo"
+          return hours + "h " + minutes + "m " + seconds + "s ";
+        }
+      }
+
+      //takes in the parameter of time in milliseconds and sleeps for that long
+      function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      //defining global variables
+      var timerON = true;
+      var timePaused = false;
+      var pauseTime = 0;
+      var timeDiff = 0;
+      //var dict = values[1];
+
+      //this function runs the timer
+      async function trueTimer() {
+        timeLeft = 0;
+        var totTimeRemaining = totTime();
+        //for loop is for looping throught the tasks
+        for(var count = 1; count<=taskList.length; count++){
+          //tell user what the next task is
+          if (count == taskList.length){
+            document.getElementById("nextTask").innerHTML="Congrats, you're on your last task!";
+          }
+          else{
+            document.getElementById("nextTask").innerHTML="The Next Task is: "+taskList[count];
+          }
+
+          //show what the current task is
+          document.getElementById("taskNames").innerHTML="Task: "+taskList[count-1];
+
+          /*for(const [key, value] of Object.entries(dict)){
+            if (value == taskList[count-1]){
+              var index = key;
+            }
+          }*/
+
+          //countDownDate = countDown(index);
+          countDownDate = countDown(count);
+          timerON = true;
+
+          //main timer calculations
+          while (timerON == true){
+            //wait for 1 second
+            await sleep(1000);
+            totTimeRemaining -= 1;
+            timeLeft = timer(countDownDate);
+
+            //exits while loop if timer is done so we can start the next task
+            if (timeLeft == "EXPIRED"){
+              timerON = false;
+            }
+
+            //calculations if the timer is currently paused
+            else if (timePaused == true){
+              timeLeft = pauseTime;
+              countDownDate+=1000
+              completionTime(count);
+              totTimeRemaining+=1;
+              document.getElementById("timeRemaining").innerHTML="There is "+processor(totTimeRemaining)+" left.";
+            }
+
+            //when the timer is just ticking
+            else{
+              document.getElementById("timer").innerHTML= "Time Left: "+timeLeft;
+              completionTime(count);
+              document.getElementById("timeRemaining").innerHTML="There is "+processor(totTimeRemaining)+" left.";
+            }
+          }
+        }
+      }
+
+      trueTimer();
+
+      //used to find when the task will finish and adds it website
+      function completionTime(count){
+        //read the information from element with id timer and creates an array
+        var timer = $("#timer").text().split(' ');
+        //changes the information from strings to integers
+        var timeNeededH=parseInt(timer[2].slice(0,2));
+        var timeNeededM=parseInt(timer[3].slice(0,2));
+        var timeNeededS=parseInt(timer[4].slice(0,2));
+        //gets the date and time and splits it into an array
+        var today = new Date();
+        //today.getHours, or getMinutes, or getSeconds just gets the current time
+        var second = today.getSeconds()+timeNeededS;
+
+        //minor time calculations, when we have over 60s
+        if(second/60>=1){
+          timeNeededM+=1;
+        }
+        second = String(checkTime(second%60));
+
+        //minor time calculations, when we have over 60m
+        var minute = today.getMinutes()+timeNeededM;
+        if(minute/60>=1){
+          timeNeededH+=1;
+        }
+        minute = String(checkTime(minute%60));
+
+        //minor calculations and formatting for the hours
+        var hour = today.getHours()+timeNeededH;
+
+        if (hour==12 || hour == 24){
+          hour = checkTime(hour%13);
+        }
+
+        else{
+          hour=checkTime(hour%12);
+        }
+        hour = String(hour);
+
+        var time = hour+":"+minute+":"+second;
+        document.getElementById('completionTime').innerHTML = "When the task will finish: " +time;
+      }
+
+      //used to calculation how long all the tasks added together takes
+      function totTime(){
+        var totS = 0;
+        //loops through each task
+        for (var i =1; i<=taskList.length; i++){
+          //gets the time needed for specific task
+          var durHKey = durationIDhours(i);
+          var durMKey = durationIDmins(i);
+          var durH = parseInt(values[1][durHKey]);
+          var durM = parseInt(values[1][durMKey]);
+          //adds the time to variable in terms of seconds
+          totS += durH*60*60 + durM*60;
+        }
+        return totS;
+      }
+
+      //takes param of time in seconds and returns it in terms of hours, mins, and secs
+      function processor(seconds){
+        var hours = checkTime(Math.floor(seconds/3600));
+        var mins = checkTime(Math.floor(seconds/60%60));
+        var secs = checkTime(seconds%60);
+        return hours+'h '+mins+'m '+secs+'s'
+      }
+
+      //used for formatting so we get 01 instead of 1
+      function checkTime(i) {
+        if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+        return i;
+      }
+
+      //is called when pause button is pressed
+      //changes values in global variables so the timers actually pause
+      function pause(){
+          if (timePaused == false){
+            timePaused = true;
+            pauseTime = timeLeft;
+          }
+          else{
+              timePaused=false;
+          }
+      }
     </script>
-</head>
-<body>
-    <p>hello</p>
-    <a href="https://iteration-1-of-studyscheduler.ics4u-studyscheduler.repl.co/newstudysession" class="button"><button>Back!</button></a>
-</body>
+  </body>
 </html>

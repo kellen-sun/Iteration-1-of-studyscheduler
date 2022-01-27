@@ -1,45 +1,60 @@
+<!--Title: Study Scheduler-->
+<!--Authors: Alex Zhang and Kellen Sun-->
+
+<!--This is the setting page and allows the user to toggle dark mode. It also allows for the user to access the home page.-->
+
 <!doctype html>
+
 <html>
-<head>
 
-	<title>Settings</title>
+  <head>
+    <!--Create a title to the webpage and connect jquery and css-->
+    <title>Settings</title>
     <link href="/static/style.css" rel="stylesheet" type="text/css">
-
-    <script src = "https://code.jquery.com/jquery-3.6.0.min.js">
-    </script>
-</head>
-<header>
-    <div class="header-left">
+    <script src = "https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <!--Check if dark mode is on and toggle it as necessary-->
+  <body class = "" onload = "dark()">
+    <!--Create the header with home button and page title-->
+    <header>
+      <div class="header-left">
         <a href="https://iteration-1-of-studyscheduler.ics4u-studyscheduler.repl.co">
-    <button>Home</button>
-    </a>
-    </div>
-    <div class="header-right">
-        <a href="https://iteration-1-of-studyscheduler.ics4u-studyscheduler.repl.co/setting">
-    <button>Settings</button>
+          <button class="logo">&#160&#160§&#160&#160</button>
         </a>
-    </div>
-    <div class="header-middle">
+      </div>
+      
+      <div class="header-middle">
         <br>
         Settings
-    </div>
-</header>
-<body class = "">
-<hr></hr>
-<form action="/setting" method="POST">
-<!--<div class="dark_mode"><input class = "inputButton" type="submit" value="Dark Mode"></input></div>-->
-</form>
+      </div>
+    </header>
 
-<button onclick='dark()'>
-    Dark Mode
-</button>
+    <hr></hr>
 
-</body>
-<script>
-    function dark(){
-        $("body").toggleClass("darkMode");
-        $(".header-middle").toggleClass("darkMode");
-        $("hr").toggleClass("darkmodeHR");
-        $("button").toggleClass("darkmodeButton")
-  }
-</script>
+    <!--Have a form that returns everytime the darkmode button is clicked. This returns to /setting page (reloads) and checks if it was a POST method then changes the value of darkmode.-->
+    <form action="/setting" method="POST">
+      <div class="dark_mode">
+        Dark Mode: 
+        <input class = "inputButton" type="submit" value="Dark Mode"></input>
+      </div>
+    </form>
+
+    <script>
+      function dark(){
+        //retrieves the python variable value to access the darkmode variable
+        //turns it into a javascript variable
+        var darkMode = {{ value[2]|tojson }};
+        //toggles the dark mode classes if darkMode is true
+        if (darkMode == true){
+          $("body").toggleClass("darkMode");
+          $(".header-middle").toggleClass("darkMode");
+          $("hr").toggleClass("darkmodeHR");
+          $("button").toggleClass("darkmodeButton");
+          $("footer").toggleClass("darkMode");
+          $(".inputButton").toggleClass("darkModeInputButton");
+          $(".logo").toggleClass("dark_mode_logo");
+        }
+      }
+    </script>
+  </body>
+</html>
